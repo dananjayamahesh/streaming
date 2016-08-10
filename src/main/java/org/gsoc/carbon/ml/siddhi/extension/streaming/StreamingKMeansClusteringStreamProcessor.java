@@ -77,7 +77,7 @@ public class StreamingKMeansClusteringStreamProcessor extends StreamProcessor {
         attributes.add(new Attribute("stderr", Attribute.Type.DOUBLE));
 
         for (int itr = 0; itr < numClusters; itr++) {
-            betaVal = "cent" + itr;
+            betaVal = "center" + itr;
             attributes.add(new Attribute(betaVal, Attribute.Type.STRING));
         }
 

@@ -111,30 +111,40 @@
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
       <!--artifactId>maven-compiler-plugin</artifactId-->
-      <artifactId>maven-assembly-plugin</artifactId>
+      <!--artifactId>maven-assembly-plugin</artifactId-->
+      <artifactId>maven-shade-plugin</artifactId>
       <!--version>3.5.1</version-->
       <executions>
         <execution>
           <phase>package</phase>
           <goals>
-            <goal>single</goal>
+            <!--goal>single</goal-->
+            <goal>shade</goal>
           </goals>
+          <configuration>
+            <transformers>
+              <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                <resource>
+                  reference.conf
+                </resource>
+              </transformer>
+            </transformers>
+            <instructions>
+              <Import-Package>
+                org.apache.spark.network.*;version="1.6.1";
+              </Import-Package>
+            </instructions>
+            <descriptorRefs>
+              <descriptorRef>
+                jar-with-dependencies
+              </descriptorRef>
+            </descriptorRefs>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
         </execution>
       </executions>
-      <configuration>
-        <instructions>
-          <Import-Package>
-            org.apache.spark.network.*;version="1.6.1";
-          </Import-Package>
-        </instructions>
-        <descriptorRefs>
-          <descriptorRef>
-            jar-with-dependencies
-          </descriptorRef>
-        </descriptorRefs>
-        <source>1.8</source>
-        <target>1.8</target>
-      </configuration>
+
     </plugin>
   </plugins>
   </build>
