@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming.samoa;
+package org.gsoc.carbon.ml.siddhi.extension.streaming.samoa;
 
 import com.github.javacliparser.ClassOption;
 import com.github.javacliparser.FlagOption;
@@ -97,7 +97,7 @@ public class StreamingClusteringTaskBuilder {
         //query ="org.wso2.carbon.ml.siddhi.extension.streaming.samoa.StreamingClusteringTask -f "+batchSize+" -i "+maxNumEvents+" -s  (org.wso2.carbon.ml.siddhi.extension.streaming.samoa.StreamingClusteringStream -K "+numClusters+" -a "+numAttributes+") -l (org.apache.samoa.learners.clusterers.simple.DistributedClusterer -l (org.apache.samoa.learners.clusterers.ClustreamClustererAdapter -l (org.apache.samoa.moa.clusterers.clustream.WithKmeans  -m 100 -k "+numClusters+")))";
         //query = "org.apache.samoa.tasks.ClusteringEvaluation";
         //query = "org.wso2.carbon.ml.siddhi.extension.streaming.samoa.StreamingClusteringTask";
-        query ="org.wso2.carbon.ml.siddhi.extension.streaming.samoa.StreamingClusteringTask -f "+batchSize+" -i "+maxNumEvents+" -s  (org.wso2.carbon.ml.siddhi.extension.streaming.samoa.StreamingClusteringStream -K "+numClusters+" -a "+numAttributes+") -l (org.apache.samoa.learners.clusterers.simple.DistributedClusterer -l (org.apache.samoa.learners.clusterers.ClustreamClustererAdapter -l (org.apache.samoa.moa.clusterers.clustream.WithKmeans  -m 100 -k "+numClusters+")))";
+        query ="org.gsoc.carbon.ml.siddhi.extension.streaming.samoa.StreamingClusteringTask -f "+batchSize+" -i "+maxNumEvents+" -s  (org.gsoc.carbon.ml.siddhi.extension.streaming.samoa.StreamingClusteringStream -K "+numClusters+" -a "+numAttributes+") -l (org.apache.samoa.learners.clusterers.simple.DistributedClusterer -l (org.apache.samoa.learners.clusterers.ClustreamClustererAdapter -l (org.apache.samoa.moa.clusterers.clustream.WithKmeans  -m 100 -k "+numClusters+")))";
         logger.info("QUERY: "+query);
         String args[]={query};
         this.initClusteringTask(args);
@@ -139,7 +139,7 @@ public class StreamingClusteringTaskBuilder {
 
         //task = new StreamingClusteringTask();
         logger.info("A");
-        if(task instanceof org.wso2.carbon.ml.siddhi.extension.streaming.samoa.StreamingClusteringTask){
+        if(task instanceof StreamingClusteringTask){
             logger.info("Task is a Instance of StreamingClusteringTask");
             StreamingClusteringTask t = (StreamingClusteringTask) task;
             t.setCepEvents(this.cepEvents);
@@ -151,19 +151,19 @@ public class StreamingClusteringTaskBuilder {
             logger.info("Check Task: Not a StreamingClusteringTask");
         }
 
-        StreamingClusteringTask t = (StreamingClusteringTask) task;
+        /*StreamingClusteringTask t = (StreamingClusteringTask) task;
         t.setCepEvents(this.cepEvents);
         t.setSamoaClusters(this.samoaClusters);
-        t.setNumClusters(this.numClusters);
+        t.setNumClusters(this.numClusters);*/
 
-        logger.info("B");
+        logger.info("Successfully Convert the Task into StreamingClusteringTask");
         task.setFactory(new SimpleComponentFactory());
-        //logger.info("C");
+        logger.info("Successfully Initialized Component Factory");
         task.init();
-        //logger.info("D");
+        logger.info("Successfully Initiated the StreamingClusteringTask");
         SimpleEngine.submitTopology(task.getTopology());
 
-        //logger.info("Simple ENgine Started");
+        logger.info("Samoa Simple Engine Started");
     }
 
 

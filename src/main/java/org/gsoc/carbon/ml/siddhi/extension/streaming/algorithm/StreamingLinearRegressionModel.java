@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming.algorithm;
+package org.gsoc.carbon.ml.siddhi.extension.streaming.algorithm;
 
 import org.apache.spark.mllib.regression.LinearRegressionModel;
 import org.apache.spark.mllib.regression.LinearRegressionWithSGD;

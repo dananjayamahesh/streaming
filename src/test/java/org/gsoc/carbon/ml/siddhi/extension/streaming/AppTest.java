@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming;
+package org.gsoc.carbon.ml.siddhi.extension.streaming;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

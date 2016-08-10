@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming.samoa;
+package org.gsoc.carbon.ml.siddhi.extension.streaming.samoa;
 
 import com.github.javacliparser.IntOption;
 import org.apache.samoa.instances.*;
@@ -27,7 +27,7 @@ public class StreamingClusteringStream  extends ClusteringStream {
     LinkedList<DataPoint> points = new LinkedList<DataPoint>();
 
     //LinkedList<double[]>cepEvents;
-    public static ConcurrentLinkedQueue<double[]> cepEvents;
+    public ConcurrentLinkedQueue<double[]> cepEvents;
     //public ConcurrentLinkedQueue<Clustering>samoaClusters;
 
     double [] values; //Cep Event
@@ -47,7 +47,7 @@ public class StreamingClusteringStream  extends ClusteringStream {
         values = new double[numAttributes];
 
         for(int i=0;i<numAttributes;i++){
-            values[i]=i;
+            values[i]=0;
         }
     }
 
@@ -73,9 +73,12 @@ public class StreamingClusteringStream  extends ClusteringStream {
         if(numGeneratedInstances == 0){
             logger.info("Sending First Samoa Instance.....");
             numGeneratedInstances++;
-            double[] values = this.values;
+            //double[] values = this.values;
             double[] values_new = new double[numAttsOption.getValue()]; // +1
             int clusterChoice = -1;
+            while(cepEvents == null);
+            while (cepEvents.isEmpty()) ;
+            double[] values = cepEvents.poll();
             System.arraycopy(values, 0, values_new, 0, values.length);
             Instance inst = new DenseInstance(1.0, values_new);
             inst.setDataset(getHeader());
@@ -83,14 +86,13 @@ public class StreamingClusteringStream  extends ClusteringStream {
 
         }else {
             numGeneratedInstances++;
-            logger.info("Sending Samoa Instance :"+numGeneratedInstances);
+           // logger.info("Sending Samoa Instance :"+numGeneratedInstances);
             double[] values_new = new double[numAttsOption.getValue()]; // +1
-            logger.info("I am here");
+            //logger.info("I am here");
 
-            while(cepEvents == null);
+            //while(cepEvents == null);
             while (cepEvents.isEmpty()) ;
-            logger.info("Cep Events Not Empty");
-
+            //logger.info("Cep Events Not Empty");
             double[] values = cepEvents.poll();
             int clusterChoice = -1;
             System.arraycopy(values, 0, values_new, 0, values.length);

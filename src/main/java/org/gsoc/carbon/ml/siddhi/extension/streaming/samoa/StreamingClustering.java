@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming.samoa;
+package org.gsoc.carbon.ml.siddhi.extension.streaming.samoa;
 
 import org.apache.samoa.moa.cluster.Cluster;
 import org.apache.samoa.moa.cluster.Clustering;
@@ -58,7 +58,7 @@ public class StreamingClustering extends Thread{
         // System.out.println("C");
 
         this.cepEvents = new ConcurrentLinkedQueue<double[]>();
-        StreamingClusteringStream.cepEvents = this.cepEvents;
+        //StreamingClusteringStream.cepEvents = this.cepEvents;
         this.samoaClusters = new  ConcurrentLinkedQueue<Clustering>();
         this.maxNumEvents = 1000000;
         try {
@@ -82,7 +82,6 @@ public class StreamingClustering extends Thread{
         cepEvents.add(eventData);
         Object[] output;
         if(!samoaClusters.isEmpty()){
-
             logger.info("Micro Clustering Done : Update the Model");
             output = new Object[numClusters +1];
             output[0] = 0.0;
@@ -99,7 +98,7 @@ public class StreamingClustering extends Thread{
                     centerStr += (","+center[j]);
                 }
                 output[i+1]= centerStr;
-                //logger.info("Center :"+i+": "+centerStr);
+                logger.info("Center :"+i+": "+centerStr);
             }
             //for(int i=0;i<dim;i++){
             //  output[i+1] = ""      }

@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming.samoa;
+package org.gsoc.carbon.ml.siddhi.extension.streaming.samoa;
 
 import com.github.javacliparser.*;
 import org.apache.samoa.evaluation.ClusteringEvaluatorProcessor;
@@ -110,7 +110,7 @@ public class StreamingClusteringTask implements Task, Configurable {
         source = new StreamingClusteringEntranceProcessor();
         streamTrain = this.streamTrainOption.getValue();
 
-        if(streamTrain instanceof org.wso2.carbon.ml.siddhi.extension.streaming.samoa.StreamingClusteringStream ){
+        if(streamTrain instanceof StreamingClusteringStream){
             logger.info("Stream is a StreamingClusteringStream");
             StreamingClusteringStream myStream = (StreamingClusteringStream)streamTrain;
             myStream.setCepEvents(this.cepEvents);

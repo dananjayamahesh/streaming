@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming.algorithm;
+package org.gsoc.carbon.ml.siddhi.extension.streaming.algorithm;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
@@ -8,6 +8,9 @@ import org.apache.spark.mllib.clustering.KMeans;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -46,6 +49,8 @@ public class StreamingKMeansClustering {
     public final int MOVING_WINDOW = 1;
     public final int TIME_BASED =2;
 
+    private static final Logger logger = LoggerFactory.getLogger(StreamingKMeansClustering.class);
+
     public StreamingKMeansClustering(int learnType,int paramCount, int batchSize, double ci, int numClusters,int numIteration, double alpha){
         this.learnType = learnType;
         this.paramCount =paramCount;
@@ -56,8 +61,16 @@ public class StreamingKMeansClustering {
         this.alpha = alpha;
         this.isBuiltModel = false;
         type=MODEL_TYPE.BATCH_PROCESS;
-        conf = new SparkConf().setMaster("local[*]").setAppName("Linear Regression Example").set("spark.driver.allowMultipleContexts", "true") ;
-        sc = new JavaSparkContext(conf);
+        logger.info("Initializing Spark Context.....");
+        try {
+            conf = new SparkConf().setMaster("local[*]").setAppName("Linear Regression Example").set("spark.driver.allowMultipleContexts", "true");
+            sc = new JavaSparkContext(conf);
+            logger.info("Successfully to Initialize Apache Spark Context");
+
+        }catch(Exception e){
+            logger.info("Failed to Initialize Apache Spark Context");
+            logger.info(e.toString());
+        }
         eventsMem = new ArrayList<String>();
 
     }

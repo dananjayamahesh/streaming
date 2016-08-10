@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming.algorithm;
+package org.gsoc.carbon.ml.siddhi.extension.streaming.algorithm;
 
 import scala.Tuple2;
 import org.apache.spark.api.java.*;
@@ -9,11 +9,10 @@ import org.apache.spark.mllib.regression.LabeledPoint;
 import org.apache.spark.mllib.regression.LinearRegressionModel;
 import org.apache.spark.mllib.regression.LinearRegressionWithSGD;
 import org.apache.spark.SparkConf;
-import java.util.Scanner;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Arrays;
 
 
 /**

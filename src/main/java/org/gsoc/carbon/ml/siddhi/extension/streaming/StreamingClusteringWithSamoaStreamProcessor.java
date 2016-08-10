@@ -1,6 +1,6 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming;
+package org.gsoc.carbon.ml.siddhi.extension.streaming;
 
-import org.wso2.carbon.ml.siddhi.extension.streaming.algorithm.StreamingKMeansClustering;
+import org.gsoc.carbon.ml.siddhi.extension.streaming.samoa.StreamingClustering;
 import org.wso2.siddhi.core.config.ExecutionPlanContext;
 import org.wso2.siddhi.core.event.ComplexEvent;
 import org.wso2.siddhi.core.event.ComplexEventChunk;
@@ -20,21 +20,24 @@ import java.util.List;
 /**
  * Created by mahesh on 6/4/16.
  */
-public class StreamingKMeansClusteringStreamProcessor extends StreamProcessor {
+public class StreamingClusteringWithSamoaStreamProcessor extends StreamProcessor {
 
-    private int learnType =0;
-    private int windowShift=0;
+    private int learnType=0;
+    private int windowShift =0 ;
+
     private int paramCount = 0;                                         // Number of x variables +1
-    private int batchSize = 10;                                          // Maximum # of events, used for regression calculation
+    private int calcInterval = 1;                                       // The frequency of regression calculation
+    private int batchSize = 10;                                 // Maximum # of events, used for regression calculation
     private double ci = 0.95;                                           // Confidence Interval
-
-    private int k;
-    private int numClusters;
-    private int numIterations;
-    private double alpha=0;
+    private double miniBatchFraction=1;
     private int paramPosition = 0;
+
+    private int numIterations = 100;
+    private int numClusters = 1;
+    private int alpha = 0;
+    private double stepSize = 0.00000001;
     private int featureSize=1;  //P
-    private StreamingKMeansClustering streamingKMeansClustering = null;
+    private StreamingClustering streamingClusteringWithSamoa = null;
 
     @Override
     protected List<Attribute> init(AbstractDefinition inputDefinition, ExpressionExecutor[] attributeExpressionExecutors, ExecutionPlanContext executionPlanContext) {
@@ -55,26 +58,40 @@ public class StreamingKMeansClusteringStreamProcessor extends StreamProcessor {
                 numClusters = ((Integer) attributeExpressionExecutors[4].execute(null));
                 alpha         = ((Integer) attributeExpressionExecutors[5].execute(null));
             } catch (ClassCastException c) {
-                throw new ExecutionPlanCreationException("Calculation interval, batch size and range should be of type int");
+                throw new ExecutionPlanCreationException("learn type, windowShift, batchSize and number of Iterations should be of type int");
             }
+
+            /*try{
+                stepSize = ((Double) attributeExpressionExecutors[4].execute(null));
+                miniBatchFraction = ((Double) attributeExpressionExecutors[5].execute(null));
+
+            }catch(ClassCastException c){
+                throw new ExecutionPlanCreationException("Step Size, Mini Batch Fraction should be in double format");
+            }*/
+
             try {
                 ci = ((Double) attributeExpressionExecutors[6].execute(null));
             } catch (ClassCastException c) {
                 throw new ExecutionPlanCreationException("Confidence interval should be of type double and a value between 0 and 1");
             }
         }
-        //System.out.println("Parameters: "+" "+batchSize+" "+" "+ci+"\n");
+        System.out.println("Streaming Clustering  Parameters: "+" "+batchSize+" "+" "+ci+"\n");
         // Pick the appropriate regression calculator
 
-        streamingKMeansClustering = new StreamingKMeansClustering(learnType,paramCount, batchSize, ci,numClusters, numIterations,alpha);
+        streamingClusteringWithSamoa = new StreamingClustering(learnType,paramCount, batchSize, ci,numClusters, numIterations,alpha);
+        try {
+            Thread.sleep(1000);
+        }catch(Exception e){
 
+        }
+        new Thread(streamingClusteringWithSamoa).start();
         // Add attributes for standard error and all beta values
         String betaVal;
         ArrayList<Attribute> attributes = new ArrayList<Attribute>(numClusters+1);
         attributes.add(new Attribute("stderr", Attribute.Type.DOUBLE));
 
         for (int itr = 0; itr < numClusters; itr++) {
-            betaVal = "cent" + itr;
+            betaVal = "center" + itr;
             attributes.add(new Attribute(betaVal, Attribute.Type.STRING));
         }
 
@@ -89,11 +106,12 @@ public class StreamingKMeansClusteringStreamProcessor extends StreamProcessor {
 
                 Object[] inputData = new Object[attributeExpressionLength - paramPosition];
                 Double[] eventData = new Double[attributeExpressionLength - paramPosition];
-
-
+                double [] cepEvent = new double[attributeExpressionLength - paramPosition];
+                Double value;
                 for (int i = paramPosition; i < attributeExpressionLength; i++) {
                     inputData[i - paramPosition] = attributeExpressionExecutors[i].execute(complexEvent);
-                    eventData[i - paramPosition] = (Double) attributeExpressionExecutors[i].execute(complexEvent);
+                    value=eventData[i - paramPosition] = (Double) attributeExpressionExecutors[i].execute(complexEvent);
+                    cepEvent[i - paramPosition] = (double)value;
                 }
 
                 //Object[] outputData = regressionCalculator.calculateLinearRegression(inputData);
@@ -101,7 +119,7 @@ public class StreamingKMeansClusteringStreamProcessor extends StreamProcessor {
 
                 // Object[] outputData= streamingLinearRegression.addToRDD(eventData);
                 //Calling the regress function
-                outputData = streamingKMeansClustering.cluster(eventData);
+                outputData = streamingClusteringWithSamoa.cluster(cepEvent);
 
                 // Skip processing if user has specified calculation interval
                 if (outputData == null) {

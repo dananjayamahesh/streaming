@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming.samoa;
+package org.gsoc.carbon.ml.siddhi.extension.streaming.samoa;
 
 import org.apache.samoa.core.ContentEvent;
 import org.apache.samoa.core.Processor;
@@ -48,7 +48,7 @@ public class StreamingClusteringEvaluationProcessor implements Processor {
         }
 
         else if(event instanceof ClusteringResultContentEvent){
-            logger.info(event.getKey()+" "+evalPoint+" ClusteringResultContentEvent "+numClusters+"\n");
+            logger.info(event.getKey()+" "+evalPoint+" ClusteringResultContentEvent "+numClusters);
             ClusteringResultContentEvent resultEvent = (ClusteringResultContentEvent)event;
 
             // Clustering clustering = KMeans.gaussianMeans(gtClustering, resultEvent.getClustering());
@@ -63,7 +63,6 @@ public class StreamingClusteringEvaluationProcessor implements Processor {
             logger.info("Number of Kernal Clusters : "+numClusters+" Number of KMeans Clusters :"+kmeansClustering.size());
           /*  for(int i=0;i<numClusters;i++){
                 Cluster cluster = clustering.get(i);
-
                 logger.info("++++++Cluster"+i+"+++++");
                 double []clusterCenter=cluster.getCenter();
                 for(int j=0;j<clusterCenter.length;j++){

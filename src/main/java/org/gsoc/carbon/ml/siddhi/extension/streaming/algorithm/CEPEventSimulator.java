@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming.algorithm;
+package org.gsoc.carbon.ml.siddhi.extension.streaming.algorithm;
 
 import java.io.BufferedReader;
 import java.io.File;

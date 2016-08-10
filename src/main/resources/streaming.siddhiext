@@ -1,3 +1,3 @@
-streamlinreg=org.wso2.carbon.ml.siddhi.extension.streaming.StreamingLinearRegressionStreamProcessor
-streamclustering=org.wso2.carbon.ml.siddhi.extension.streaming.StreamingKMeansClusteringStreamProcessor
-streamclusteringsamoa=org.wso2.carbon.ml.siddhi.extension.streaming.StreamingClusteringWithSamoaStreamProcessor
+streamlinreg=org.gsoc.carbon.ml.siddhi.extension.streaming.StreamingLinearRegressionStreamProcessor
+streamclustering=org.gsoc.carbon.ml.siddhi.extension.streaming.StreamingKMeansClusteringStreamProcessor
+streamclusteringsamoa=org.gsoc.carbon.ml.siddhi.extension.streaming.StreamingClusteringWithSamoaStreamProcessor

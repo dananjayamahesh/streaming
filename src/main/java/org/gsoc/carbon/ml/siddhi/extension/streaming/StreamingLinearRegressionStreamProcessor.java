@@ -1,4 +1,4 @@
-package org.wso2.carbon.ml.siddhi.extension.streaming;
+package org.gsoc.carbon.ml.siddhi.extension.streaming;
 
 import org.wso2.siddhi.core.config.ExecutionPlanContext;
 import org.wso2.siddhi.core.event.ComplexEvent;
@@ -13,7 +13,7 @@ import org.wso2.siddhi.core.query.processor.Processor;
 import org.wso2.siddhi.core.query.processor.stream.StreamProcessor;
 import org.wso2.siddhi.query.api.definition.AbstractDefinition;
 import org.wso2.siddhi.query.api.definition.Attribute;
-import org.wso2.carbon.ml.siddhi.extension.streaming.algorithm.StreamingLinearRegression;
+import org.gsoc.carbon.ml.siddhi.extension.streaming.algorithm.StreamingLinearRegression;
 import java.util.ArrayList;
 import java.util.List;
 
