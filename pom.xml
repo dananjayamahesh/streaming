@@ -93,7 +93,7 @@
   </dependencies>
 
 
-  <build>
+  <!--build>
     <plugins>
     <plugin>
     <groupId>org.apache.maven.plugins</groupId>
@@ -104,15 +104,15 @@
       </configuration>
     </plugin>
     </plugins>
-  </build>
+  </build-->
 
-<!--build>
+<build>
   <plugins>
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-compiler-plugin</artifactId>
+      <!--artifactId>maven-compiler-plugin</artifactId-->
       <artifactId>maven-assembly-plugin</artifactId>
-      <version>3.5.1</version>
+      <!--version>3.5.1</version-->
       <executions>
         <execution>
           <phase>package</phase>
@@ -122,6 +122,11 @@
         </execution>
       </executions>
       <configuration>
+        <instructions>
+          <Import-Package>
+            org.apache.spark.network.*;version="1.6.1";
+          </Import-Package>
+        </instructions>
         <descriptorRefs>
           <descriptorRef>
             jar-with-dependencies
@@ -132,6 +137,6 @@
       </configuration>
     </plugin>
   </plugins>
-  </build-->
+  </build>
 
 </project>
